@@ -1,32 +1,123 @@
 # 🎸 Bocchi the Rock! - Live Waifu Polling System
 
-Aplikasi desktop interaktif untuk melakukan polling karakter favorit dari anime *Bocchi the Rock!*. Dibangun menggunakan **Java Swing** dengan database **SQLite** agar data hasil voting tersimpan permanen secara lokal.
+Aplikasi desktop interaktif untuk melakukan polling karakter favorit dari anime *Bocchi the Rock!* menggunakan Java Swing dan SQLite.
 
 ## ✨ Fitur Utama
-* **Live Results:** Grafik batang (*bar chart*) hasil voting akan langsung diperbarui (*real-time*) setiap kali suara masuk.
-* **Modern Dark Mode UI:** Tampilan antarmuka gelap yang nyaman di mata dengan komponen yang diubahsuai (*custom components*).
-* **Responsive Image Scaling:** Gambar karakter akan menyesuaikan ukuran kotak secara otomatis tanpa terpotong atau gepeng (mirip dengan `object-fit: cover` di CSS web).
-* **Click-to-Vote:** Pengguna bisa langsung mengklik gambar atau area panel karakter untuk memilih, tidak harus mengklik tepat di *radio button*.
-* **Persistent Database:** Menggunakan SQLite terintegrasi (`sqlite-jdbc`). Data voting tidak akan hilang meskipun aplikasi ditutup.
-* **Secure Reset:** Tombol untuk mereset seluruh data suara ke angka 0, dilindungi dengan validasi *password* ganda.
+
+- Voting karakter favorit secara interaktif
+- Hasil voting diperbarui secara langsung (real-time)
+- Tampilan modern dengan dark mode
+- Gambar karakter menyesuaikan ukuran panel secara otomatis
+- Klik gambar atau panel untuk memilih karakter
+- Data voting tersimpan permanen menggunakan SQLite
+- Export hasil voting ke file TXT
+- Fitur reset data dengan proteksi password
+
+---
 
 ## 🛠️ Teknologi yang Digunakan
-* **Bahasa:** Java (JDK 8 atau lebih baru)
-* **GUI:** Java Swing & AWT
-* **Database:** SQLite (File-based database)
 
-## 🚀 Cara Penggunaan
+- Java (JDK 8+)
+- Java Swing & AWT
+- SQLite
+- SQLite JDBC Driver
 
-Anda bisa menjalankan aplikasi ini dengan dua cara, baik sebagai pengguna langsung maupun melalui *source code*:
+---
 
-### Opsi 1: Jalankan Langsung (.exe)
-Cara paling mudah jika Anda hanya ingin langsung mencoba aplikasinya.
-1. Unduh file `BocchiPoll.exe` beserta folder `images` dari repositori ini.
-2. Pastikan file `.exe` dan folder `images` diletakkan berdampingan di dalam satu folder yang sama (misalnya di Desktop).
-3. Klik ganda (*double-click*) pada `BocchiPoll.exe` dan aplikasi siap digunakan!
+## 📂 Struktur Proyek
 
-### Opsi 2: Menjalankan lewat Eclipse (Source Code)
-Cara ini digunakan jika Anda ingin melihat kode sumbernya atau ikut memodifikasi aplikasinya.
-1. *Clone* repositori ini ke laptop Anda:
-   ```bash
-   git clone [https://github.com/username-anda/nama-repo-anda.git](https://github.com/username-anda/nama-repo-anda.git)
+```text
+src/
+├── BocchiPollMainFrame.java
+├── VoteDAO.java
+├── DatabaseConfig.java
+├── KarakterVote.java
+├── KandidatGridPanel.java
+├── HasilChartPanel.java
+├── ControlPanel.java
+├── ResponsiveImagePanel.java
+└── ReportExporter.java
+
+images/
+└── Gambar karakter
+
+bocchi_poll.db
+```
+
+---
+
+## 🚀 Cara Menjalankan
+
+### Menjalankan dari Source Code
+
+1. Clone repository:
+
+```bash
+git clone https://github.com/username/repository.git
+```
+
+2. Buka project menggunakan Eclipse, IntelliJ IDEA, atau NetBeans.
+3. Pastikan library SQLite JDBC sudah ditambahkan ke project.
+4. Jalankan file:
+
+```java
+BocchiPollMainFrame.java
+```
+
+---
+
+## 🗄️ Database
+
+Aplikasi menggunakan SQLite sebagai database lokal.
+
+File database:
+
+```text
+bocchi_poll.db
+```
+
+Seluruh hasil voting akan tersimpan secara otomatis dan tetap tersedia meskipun aplikasi ditutup.
+
+---
+
+## 🔧 Smell Code yang Ditemukan dan Refactoring yang Dilakukan
+
+Proyek ini telah melalui proses refactoring untuk meningkatkan kualitas kode, keterbacaan, dan kemudahan pengembangan.
+
+### 1. Large Class
+
+Sebelumnya hampir seluruh logika aplikasi berada dalam satu file besar. Setelah refactoring, tanggung jawab setiap bagian dipisahkan ke dalam beberapa kelas khusus:
+
+| Kelas | Tanggung Jawab |
+|---------|---------------|
+| DatabaseConfig | Mengelola koneksi database |
+| VoteDAO | Operasi CRUD dan akses data |
+| KarakterVote | Model data karakter |
+| ResponsiveImagePanel | Menampilkan gambar karakter |
+| KandidatGridPanel | Menampilkan pilihan karakter |
+| HasilChartPanel | Menampilkan hasil voting |
+| ControlPanel | Tombol aksi aplikasi |
+| ReportExporter | Export laporan voting |
+| BocchiPollMainFrame | Pengendali utama aplikasi |
+
+### 2. Long Method
+
+Beberapa method yang terlalu panjang dipecah menjadi method yang lebih kecil dan fokus pada satu tugas tertentu.
+
+Manfaat:
+- Kode lebih mudah dibaca
+- Lebih mudah diperbaiki dan dikembangkan
+- Mempermudah proses debugging
+
+### 3. Shotgun Surgery
+
+Seluruh akses database dipusatkan pada kelas `VoteDAO`, sehingga logika database tidak bercampur dengan logika tampilan (UI) dan tidak terpisah-pisah sendiri.
+
+### 4. Duplicated Code
+
+Koneksi database yang sebelumnya ditulis berulang kali kini dipusatkan dalam kelas `DatabaseConfig`, sehingga lebih mudah dikelola dan dipelihara.
+
+### 5. Message Chains
+
+Pemanggilan method berantai yang terlalu panjang pada proses pengolahan gambar diperbaiki dengan menambahkan method pembantu.
+---
