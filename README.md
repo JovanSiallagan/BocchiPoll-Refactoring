@@ -120,4 +120,5 @@ Koneksi database yang sebelumnya ditulis berulang kali kini dipusatkan dalam kel
 ### 5. Message Chains
 
 Pemanggilan method berantai yang terlalu panjang pada proses pengolahan gambar diperbaiki dengan menambahkan method pembantu.
+
 ---
